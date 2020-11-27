@@ -22,7 +22,7 @@ async function sender() {
         if (records[i][3] !== "") {
             let response = await sendCoin.sendCoin(chainID, mnemonic, records[i][2], denom, String(multiplier * records[i][3]), 25000, denom, 200000, "block", records[i][0])
 
-            if (response.code == undefined) {
+            if (response.code === undefined) {
                 console.log("Sending to: ", records[i][2], "**TX HASH for Send Coin** :" + response.txhash);
             } else {
                 console.log("Sending to: ", records[i][2], "**TX failed for Send Coin** :" + response.raw_log);

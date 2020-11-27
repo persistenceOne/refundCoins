@@ -1,0 +1,9 @@
+{
+  "lcdURL": "http://localhost:1317",
+  "mnemonic": "empty dry banner forward match cage thing pyramid argue vibrant banana cricket twenty embark swear genuine planet tenant noise label quarter glove either fly",
+  "chain_id": "testing",
+  "denom": "uatom",
+  "multiplier": 1000000,
+  "readFileName": "/home/puneet/Documents/parseDataDummy.csv",
+  "outputFileName": "/home/puneet/Documents/output.csv"
+}

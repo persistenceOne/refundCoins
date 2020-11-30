@@ -1,9 +1,13 @@
 {
   "lcdURL": "http://localhost:1317",
-  "mnemonic": "empty dry banner forward match cage thing pyramid argue vibrant banana cricket twenty embark swear genuine planet tenant noise label quarter glove either fly",
-  "chain_id": "testing",
+  "mnemonic": "wage thunder live sense resemble foil apple course spin horse glass mansion midnight laundry acoustic rhythm loan scale talent push green direct brick please",
+  "chain_id": "cosmoshub-3",
   "denom": "uatom",
   "multiplier": 1000000,
   "readFileName": "/home/puneet/Documents/parseDataDummy.csv",
-  "outputFileName": "/home/puneet/Documents/output.csv"
+  "outputFileName": "/home/puneet/Documents/output.csv",
+  "initialTxHashQueryDelay": 20000,
+  "scheduledTxHashQueryDelay": 8000,
+  "numberOfRetries": 20,
+  "sendTxDelay": 5000
 }

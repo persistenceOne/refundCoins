@@ -7,6 +7,10 @@ config is
   "denom": "uatom", // micro denom eg- uatom, ulune
   "multiplier": 1000000, // converter to atom, luna
   "readFileName": "/path/to/readFile.csv", //csv file of addresses to send to
-  "outputFileName": "/path/to/output.csv" // output report csv.
+  "outputFileName": "/path/to/output.csv", // output report csv.
+  "initialTxHashQueryDelay": 20000, //await time before querying hash 
+  "scheduledTxHashQueryDelay": 8000, //await for retrying query txHash
+  "numberOfRetries": 20, //number of times to retry for querying txHash
+  "sendTxDelay": 5000 //await for sending txAgain, in case of tx fail.
 }
 ```

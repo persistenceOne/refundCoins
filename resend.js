@@ -12,19 +12,23 @@ const url = config.lcdURL;
 const chainID = config.chain_id;
 const denom = config.denom;
 const multiplier = config.multiplier
+const initialTxHashQueryDelay = config.initialTxHashQueryDelay
+const scheduledTxHashQueryDelay = config.scheduledTxHashQueryDelay
+const numberOfRetries = config.numberOfRetries
+const sendTxDelay = config.sendTxDelay
 const sendCoin = new (require("persistencejs/transaction/bank/sendCoin"))(url);
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sender() {
     try {
         const fileContent = await fs.readFile(readFileName);
         const records = parse(fileContent, {columns: false});
-        const output = [];
         for (let i = 0; i < records.length; i++) {
             let result = records[i]
             if (records[i][3] !== "") {
-                console.log("To: ", records[i][2], "Amount atom: ", records[i][3])
-                let response = await sendCoin.sendCoin(chainID, mnemonic, records[i][2], denom, String(multiplier * records[i][3]), 0, denom, 200000, "sync", records[i][0])
-                let queryHashResponse = await poll(url, response.txhash)
+                console.log("\nTo: ", records[i][2], "Amount atom: ", records[i][3])
+                let response = await pollTx(chainID, mnemonic, records[i][2], denom, String(multiplier * records[i][3]), 0, denom, 200000, "sync", records[i][0])
+                let queryHashResponse = await pollTxHash(url, response.txhash)
                 queryHashResponse = JSON.parse(queryHashResponse)
                 result.push(queryHashResponse.txhash)
                 result.push(queryHashResponse.height)
@@ -39,11 +43,10 @@ async function sender() {
             } else {
                 result.push("This row had error: not processed")
             }
-            output.push(result.join())
+            fsWrite.appendFileSync(outputFileName, result.join() + os.EOL);
         }
-        fsWrite.writeFileSync(outputFileName, output.join(os.EOL));
     } catch (error) {
-        console.log("ERROR")
+        console.log("ERROR: ", error)
     }
 }
 
@@ -54,31 +57,50 @@ async function queryTxHash(lcd, txHash) {
         request(lcd + "/txs/" + txHash, (error, response, body) => {
             if (error) reject(error);
             if (response.statusCode !== 200) {
-                reject('Invalid status code <' + response.statusCode + '>'+ " response: " + body);
+                reject('Invalid status code <' + response.statusCode + '>' + " response: " + body);
             }
             resolve(body);
         });
     });
 }
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function poll(lcd, txHash) {
-    // maximum of 10 requests
-    await delay(8000);
+async function pollTxHash(lcd, txHash) {
+    await delay(initialTxHashQueryDelay);
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < numberOfRetries; i++) {
 
         try {
             const result = await queryTxHash(lcd, txHash)
             return result
         } catch (error) {
             console.log(error)
-            console.log("retrying in 8000ms: ", i, "th time")
-            await delay(8000);
+            console.log("retrying in "+ scheduledTxHashQueryDelay +": ", i, "th time")
+            await delay(scheduledTxHashQueryDelay);
 
         }
 
     }
-    return 'Server unresponsive';
+    return JSON.stringify({
+        "txhash": txHash,
+        "height": 0,
+        "code": 111,
+        "raw_log": "failed all retries"
+    })
+}
+
+
+async function pollTx(chainID, mnemonic, toAddress, denom, amount, feesAmount, feesDenom, gas, mode, memo) {
+    try {
+        while (true) {
+            const result = await await sendCoin.sendCoin(chainID, mnemonic, toAddress, denom, amount, feesAmount, feesDenom, gas, mode, memo)
+            if (result.txhash !== undefined) {
+                return result
+            }
+            console.log("Polling tx for address: ", toAddress)
+            await delay(sendTxDelay)
+        }
+    } catch (error) {
+        throw error
+    }
 }

@@ -6,7 +6,7 @@
   "multiplier": 1000000,
   "readFileName": "/home/puneet/Documents/parseDataDummy.csv",
   "outputFileName": "/home/puneet/Documents/output.csv",
-  "initialTxHashQueryDelay": 8000,
+  "initialTxHashQueryDelay": 20000,
   "scheduledTxHashQueryDelay": 8000,
   "numberOfRetries": 20,
   "sendTxDelay": 5000

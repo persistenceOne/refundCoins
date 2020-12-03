@@ -14,3 +14,13 @@ config is
   "sendTxDelay": 5000 //await for sending txAgain, in case of tx fail.
 }
 ```
+
+readFileName CSV is a list of magic transaction received during stakedrop has columns as 
+
+`TxHash, Memo, SenderAddress, amount, errorTxAmount`
+
+outputFileName CSV is a list of all resend transactions done to return the transactions, it has columns as
+
+`MagicTxHash, MagicTxMemo, MagicTxSenderAddress, MagicTxAmount, errorTxAmount, ResendTxHash, ResendTxHeight, ResendTxSuccess/Failure`
+
+

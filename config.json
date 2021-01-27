@@ -1,13 +1,15 @@
 {
   "lcdURL": "http://localhost:1317",
   "mnemonic": "wage thunder live sense resemble foil apple course spin horse glass mansion midnight laundry acoustic rhythm loan scale talent push green direct brick please",
-  "chain_id": "cosmoshub-3",
-  "denom": "uatom",
-  "multiplier": 1000000,
-  "readFileName": "/home/puneet/Documents/parseDataDummy.csv",
+  "chain_id": "columbus-4",
+  "denom": "uluna",
+  "multiplier": 1,
+  "feeAmount": 0,
+  "feeDenom": "ukrw",
+  "readFileName": "/home/puneet/Documents/testInput.csv",
   "outputFileName": "/home/puneet/Documents/output.csv",
   "initialTxHashQueryDelay": 20000,
-  "scheduledTxHashQueryDelay": 8000,
-  "numberOfRetries": 20,
+  "scheduledTxHashQueryDelay": 10000,
+  "numberOfRetries": 30,
   "sendTxDelay": 5000
 }

@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "csv-parse": "^4.14.1",
-    "persistencejs": "git+https://github.com/persistenceOne/persistenceJS.git#SDKv0.1.0"
+    "persistencejs": "git+https://github.com/persistenceOne/persistenceJS.git#puneet2019/terraWallet"
   }
 }

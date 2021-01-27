@@ -11,6 +11,8 @@ const readFileName = config.readFileName;
 const url = config.lcdURL;
 const chainID = config.chain_id;
 const denom = config.denom;
+const feeAmount = config.feeAmount;
+const feeDenom = config.feeDenom;
 const multiplier = config.multiplier
 const initialTxHashQueryDelay = config.initialTxHashQueryDelay
 const scheduledTxHashQueryDelay = config.scheduledTxHashQueryDelay
@@ -26,8 +28,8 @@ async function sender() {
         for (let i = 0; i < records.length; i++) {
             let result = records[i]
             if (records[i][3] !== "") {
-                console.log("\nTo: ", records[i][2], "Amount atom: ", records[i][3])
-                let response = await pollTx(chainID, mnemonic, records[i][2], denom, String(multiplier * records[i][3]), 0, denom, 200000, "sync", records[i][0])
+                console.log("\nTo: ", records[i][2], "Amount: ", records[i][3], " ", denom)
+                let response = await pollTx(chainID, mnemonic, records[i][2], denom, String(multiplier * records[i][3]), feeAmount, feeDenom, 200000, "sync", records[i][0])
                 let queryHashResponse = await pollTxHash(url, response.txhash)
                 queryHashResponse = JSON.parse(queryHashResponse)
                 result.push(queryHashResponse.txhash)
@@ -93,7 +95,7 @@ async function pollTxHash(lcd, txHash) {
 async function pollTx(chainID, mnemonic, toAddress, denom, amount, feesAmount, feesDenom, gas, mode, memo) {
     try {
         while (true) {
-            const result = await await sendCoin.sendCoin(chainID, mnemonic, toAddress, denom, amount, feesAmount, feesDenom, gas, mode, memo)
+            const result = await sendCoin.sendCoin(chainID, mnemonic, toAddress, denom, amount, feesAmount, feesDenom, gas, mode, memo)
             if (result.txhash !== undefined) {
                 return result
             }
